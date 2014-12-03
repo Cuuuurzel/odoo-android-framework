@@ -88,5 +88,20 @@
     <declare-styleable name="ODrawerScrollView">
         <attr name="insetForeground" format="reference|color" />
     </declare-styleable>
+    <declare-styleable name="customcontrol">
+        <attr name="ofield_name" format="string" />
+        <attr name="radio_label" format="string" />
+        <attr name="icon_resource" format="reference" />
+        <attr name="show_icon" format="boolean" />
+        <attr name="show_label" format="boolean" />
+        <attr name="icon_tint" format="reference|color" />
+        <attr name="fieldType">
+            <enum name="Text" value="0" />
+            <enum name="Boolean" value="1" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="customform">
+        <attr name="modelName" format="string"></attr>
+    </declare-styleable>
 
 </resources>

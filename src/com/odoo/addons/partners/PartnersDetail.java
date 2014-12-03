@@ -52,7 +52,6 @@ public class PartnersDetail extends BaseFragment implements
 
 	private void init() {
 		mForm = (OForm) mView.findViewById(R.id.partnerDetail);
-
 		// ManyToOne searchable control with dialog callback
 		OField company_id = (OField) mForm.findViewById(R.id.parent_id);
 		company_id.setManyToOneSearchableCallbacks(this);

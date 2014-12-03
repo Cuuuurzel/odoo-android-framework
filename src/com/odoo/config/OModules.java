@@ -18,6 +18,7 @@
  */
 package com.odoo.config;
 
+import com.odoo.addons.partner.demo.model.PartnerDemo;
 import com.odoo.addons.partners.Partners;
 import com.odoo.support.OModule;
 import com.odoo.support.OModulesHelper;
@@ -28,4 +29,5 @@ import com.odoo.support.OModulesHelper;
 public class OModules extends OModulesHelper {
 
 	OModule partners = new OModule(Partners.class).setDefault();
+	OModule partner = new OModule(PartnerDemo.class);
 }

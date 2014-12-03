@@ -314,7 +314,6 @@ public class AccountCreate extends BaseFragment implements OnItemClickListener {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-
 				}
 			});
 			return null;
@@ -374,6 +373,6 @@ public class AccountCreate extends BaseFragment implements OnItemClickListener {
 	@Override
 	public void onResume() {
 		super.onResume();
-//		getActivity().getActionBar().hide();
+		// getActivity().getActionBar().hide();
 	}
 }

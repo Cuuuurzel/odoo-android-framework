@@ -43,13 +43,13 @@ import com.odoo.util.ODate;
 public class ResPartner extends OModel {
 
 	OColumn name = new OColumn("Name", OText.class);
-	OColumn is_company = new OColumn("Is Company", OBoolean.class)
+	OColumn is_company = new OColumn("Company", OBoolean.class)
 			.setDefault(false);
 	OColumn image_small = new OColumn("Image", OBlob.class).setDefault(false);
 	OColumn street = new OColumn("Street", OText.class);
 	OColumn street2 = new OColumn("Street2", OText.class);
 	OColumn city = new OColumn("City", OText.class);
-	OColumn zip = new OColumn("Zip", OVarchar.class, 10);
+	OColumn zip = new OColumn("Zip code", OVarchar.class, 10);
 	OColumn website = new OColumn("Website", OText.class);
 	OColumn phone = new OColumn("Phone", OText.class);
 	OColumn mobile = new OColumn("Mobile", OText.class);
