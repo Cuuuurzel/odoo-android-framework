@@ -63,6 +63,8 @@ public class CustomForm extends LinearLayout {
 			TypedArray types = mContext.obtainStyledAttributes(attrs,
 					R.styleable.customform);
 			mModel = types.getString(R.styleable.customform_modelName);
+			mEditable = types.getBoolean(R.styleable.customform_editableMode,
+					false);
 			types.recycle();
 		}
 		initForm();
@@ -107,11 +109,11 @@ public class CustomForm extends LinearLayout {
 				if (column != null) {
 					c.setColumn(column);
 				}
+				c.setEditable(getEditable());
 				if (mRecord != null && mRecord.contains(c.getFieldName())) {
 					// setting value to control
 					c.setValue(mRecord.get(c.getFieldName()));
 				}
-				c.setEditable(mEditable);
 			}
 		}
 	}

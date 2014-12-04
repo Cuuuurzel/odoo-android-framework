@@ -10,12 +10,15 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.odoo.R;
@@ -41,17 +44,33 @@ public class CustomControl extends LinearLayout {
 	private Object mValue = null;
 	private EditText mEditText = null;
 	private RadioGroup mradioGrp = null;
-	private String[] labels = null;
-	private boolean mEditable = false, showIcon = true, show_label = true;
-	private View mControl = null;
+	private boolean mEditable = true, showIcon = true, show_label = true;
 	private TextView label_view = null, mTextView = null;
 	private int resId, tint_color = Color.BLACK;
 	private ImageView img_icon = null;
 	private ViewGroup container = null;
 	private CheckBox mCheckBox = null;
+	private Boolean with_bottom_padding = true, with_top_padding = true;
+	private WidgetType mWidgetType = null;
+	private View mControl = null;
+	private Integer mValueArrayId = null;
 
 	public enum Orientation {
 		Vertical, Horizantal;
+	}
+
+	public enum WidgetType {
+		Switch, RadioGroup;
+
+		public static WidgetType getWidgetType(int widget) {
+			switch (widget) {
+			case 0:
+				return WidgetType.Switch;
+			case 1:
+				return WidgetType.RadioGroup;
+			}
+			return null;
+		}
 	}
 
 	public enum FieldType {
@@ -115,6 +134,17 @@ public class CustomControl extends LinearLayout {
 			int type_value = types.getInt(R.styleable.customcontrol_fieldType,
 					0);
 			mType = FieldType.getTypeValue(type_value);
+
+			with_bottom_padding = types.getBoolean(
+					R.styleable.customcontrol_with_bottom_padding, true);
+			with_top_padding = types.getBoolean(
+					R.styleable.customcontrol_with_top_padding, true);
+			mLabel = types.getString(R.styleable.customcontrol_control_label);
+			mValue = types.getString(R.styleable.customcontrol_default_value);
+			mValueArrayId = types.getResourceId(
+					R.styleable.customcontrol_value_array, 0);
+			mWidgetType = WidgetType.getWidgetType(types.getInt(
+					R.styleable.customcontrol_customWidget, -1));
 			types.recycle();
 		}
 		initcontrol();
@@ -124,6 +154,16 @@ public class CustomControl extends LinearLayout {
 		removeAllViews();
 		View layout = LayoutInflater.from(mContext).inflate(
 				R.layout.custom_control_template, this, false);
+		int top_padd = layout.getPaddingTop();
+		int right_padd = layout.getPaddingRight();
+		int bottom_padd = layout.getPaddingBottom();
+		int left_padd = layout.getPaddingLeft();
+		if (!with_bottom_padding) {
+			layout.setPadding(left_padd, top_padd, right_padd, 0);
+		}
+		if (!with_top_padding) {
+			layout.setPadding(left_padd, 0, right_padd, bottom_padd);
+		}
 		addView(layout);
 		container = (ViewGroup) findViewById(R.id.control_container);
 		img_icon = (ImageView) findViewById(android.R.id.icon);
@@ -134,6 +174,8 @@ public class CustomControl extends LinearLayout {
 	private void createTextView() {
 		mTextView = new TextView(mContext);
 		mTextView.setTextColor(Color.BLACK);
+		if (!show_label)
+			mTextView.setPadding(0, 8, 0, 0);
 	}
 
 	public void initcontrol() {
@@ -241,30 +283,47 @@ public class CustomControl extends LinearLayout {
 
 	public void setValue(Object value) {
 		mValue = value;
-		switch (mType) {
-		case Text:
-			if (getEditable())
-				mEditText.setText(getValue().toString());
-			else
-				mTextView.setText(getValue().toString());
-			break;
-		case Boolean:
-			if (getEditable())
-				mCheckBox.setChecked(Boolean.getBoolean(getValue().toString()));
-			else
-				mTextView.setText(getCheckBoxLabel());
-			break;
-		case Chips:
-			break;
-		case ManyToOne:
-			break;
-		case Selection:
-			break;
+		if (mValue != null) {
+			switch (mType) {
+			case Text:
+				if (getEditable())
+					mEditText.setText(getValue().toString());
+				else
+					mTextView.setText(getValue().toString());
+				break;
+			case Boolean:
+				Boolean checked = Boolean.parseBoolean(getValue().toString());
+				if (getEditable()) {
+					if (mWidgetType != null) {
+						switch (mWidgetType) {
+						case Switch:
+							Switch bool_switch = (Switch) mControl;
+							if (bool_switch != null)
+								bool_switch.setChecked(checked);
+							break;
+						default:
+						}
+					} else
+						mCheckBox.setChecked(checked);
+				} else {
+					if (checked)
+						mTextView.setText(getCheckBoxLabel());
+					else
+						setVisibility(GONE);
+				}
+				break;
+			case Chips:
+				break;
+			case ManyToOne:
+				break;
+			case Selection:
+				break;
+			}
 		}
 	}
 
-	public <T> T getValue() {
-		return (T) mValue;
+	public Object getValue() {
+		return mValue;
 	}
 
 	public void setEditable(Boolean editable) {
@@ -324,20 +383,31 @@ public class CustomControl extends LinearLayout {
 
 	private View initBooleanControl() {
 		if (getEditable()) {
-			LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT,
-					LayoutParams.MATCH_PARENT);
+			ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+			if (mWidgetType != null) {
+				switch (mWidgetType) {
+				case Switch:
+					Switch mSwitch = new Switch(mContext);
+					mSwitch.setLayoutParams(params);
+					setValue(getValue());
+					mSwitch.setText(getLabelText());
+					return mSwitch;
+				default:
+				}
+			}
 			mCheckBox = new CheckBox(mContext);
 			mCheckBox.setLayoutParams(params);
-			if (getValue() != null) {
-				String bool_val = getValue().toString();
-				mCheckBox.setChecked(Boolean.parseBoolean(bool_val));
-			}
 			if (getLabelText() != null)
 				mCheckBox.setText(getLabelText());
 			else
 				mCheckBox.setText(getFieldName());
 			return mCheckBox;
 		} else {
+			if (getValue() != null
+					&& !(Boolean.parseBoolean(getValue().toString()))) {
+				setVisibility(GONE);
+			}
 			mTextView.setText(getCheckBoxLabel());
 			return mTextView;
 		}
@@ -353,25 +423,46 @@ public class CustomControl extends LinearLayout {
 	}
 
 	private View initRadioGroup() {
-		setOrientation(VERTICAL);
-		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT);
-		mradioGrp = new RadioGroup(mContext);
-		mradioGrp.setLayoutParams(params);
-		for (String label : labels) {
-			RadioButton rdoBtn = new RadioButton(mContext);
-			rdoBtn.setText(label);
-			mradioGrp.addView(rdoBtn);
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT);
+		String[] labels = {};
+		if (mValueArrayId != null
+				&& !mContext.getClass().getSimpleName()
+						.contains("BridgeContext")) {
+			labels = mContext.getResources().getStringArray(
+					(Integer) mValueArrayId);
+
 		}
-		return mradioGrp;
-	}
+		int selected_position = -1;
+		if (getValue() != null && labels.length > 0) {
+			selected_position = Integer.parseInt(getValue().toString());
+		}
+		if (mWidgetType != null) {
+			switch (mWidgetType) {
+			case RadioGroup:
+				mradioGrp = new RadioGroup(mContext);
+				mradioGrp.setLayoutParams(params);
+				for (String label : labels) {
+					RadioButton rdoBtn = new RadioButton(mContext);
+					rdoBtn.setLayoutParams(params);
+					rdoBtn.setText(label);
+					mradioGrp.addView(rdoBtn);
+				}
+				if (selected_position != -1)
+					((RadioButton) mradioGrp.getChildAt(selected_position))
+							.setChecked(true);
+				return mradioGrp;
+			default:
+			}
+		}
 
-	public void setRadioLabels(String[] labels) {
-		this.labels = labels;
-	}
-
-	public String[] getRadioLabels() {
-		return labels;
+		Spinner mSpinner = new Spinner(mContext);
+		mSpinner.setLayoutParams(params);
+		mSpinner.setAdapter(new ArrayAdapter<String>(mContext,
+				android.R.layout.simple_list_item_1, labels));
+		if (selected_position != -1)
+			mSpinner.setSelection(selected_position);
+		return mSpinner;
 	}
 
 	public void setIcon(int resourceId) {

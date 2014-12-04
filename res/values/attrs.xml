@@ -98,9 +98,20 @@
         <attr name="fieldType">
             <enum name="Text" value="0" />
             <enum name="Boolean" value="1" />
+            <enum name="Selection" value="4" />
         </attr>
+        <attr name="customWidget">
+            <enum name="Switch" value="0" />
+            <enum name="RadioGroup" value="1" />
+        </attr>
+        <attr name="with_bottom_padding" format="boolean" />
+        <attr name="with_top_padding" format="boolean" />
+        <attr name="control_label" format="string|reference" />
+        <attr name="default_value" format="string|reference" />
+        <attr name="value_array" format="reference" />
     </declare-styleable>
     <declare-styleable name="customform">
+        <attr name="editableMode" format="boolean" />
         <attr name="modelName" format="string"></attr>
     </declare-styleable>
 

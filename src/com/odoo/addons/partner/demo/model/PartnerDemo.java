@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.odoo.R;
 import com.odoo.base.res.ResPartner;
-import com.odoo.demo.controls.com.CustomControl;
 import com.odoo.demo.controls.com.CustomForm;
 import com.odoo.orm.ODataRow;
 import com.odoo.support.fragment.BaseFragment;
@@ -42,18 +41,10 @@ public class PartnerDemo extends BaseFragment {
 	}
 
 	private void init() {
-		CustomControl c1 = (CustomControl) mView.findViewById(R.id.controltxt1);
-		c1.setHint("Enter You Name");
-		CustomControl c2 = (CustomControl) mView.findViewById(R.id.controltxt2);
-		CustomControl c3 = (CustomControl) mView.findViewById(R.id.controlchk3);
 		CustomForm cForm = (CustomForm) mView.findViewById(R.id.form);
 		row = new ODataRow();
-
-		final CustomControl c4 = (CustomControl) cForm
-				.findViewById(R.id.controlrdobtn4);
 		ResPartner resPartner = new ResPartner(getActivity());
 		row = resPartner.select(5);
-		c4.setIcon(R.drawable.ic_action_add_account);
 		cForm.setEditable(true);
 		cForm.setData(row);
 	}
