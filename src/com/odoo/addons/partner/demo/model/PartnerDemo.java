@@ -54,9 +54,8 @@ public class PartnerDemo extends BaseFragment {
 		ResPartner resPartner = new ResPartner(getActivity());
 		row = resPartner.select(5);
 		c4.setIcon(R.drawable.ic_action_add_account);
+		cForm.setEditable(true);
 		cForm.setData(row);
-		cForm.initForm();
-
 	}
 
 	@Override

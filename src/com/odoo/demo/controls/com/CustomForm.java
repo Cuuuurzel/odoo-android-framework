@@ -83,6 +83,7 @@ public class CustomForm extends LinearLayout {
 	public void setData(ODataRow record) {
 		mRecord = new ODataRow();
 		mRecord = record;
+		initForm();
 	}
 
 	public ODataRow getData() {
@@ -110,8 +111,7 @@ public class CustomForm extends LinearLayout {
 					// setting value to control
 					c.setValue(mRecord.get(c.getFieldName()));
 				}
-				c.setEditable(getEditable());
-				c.initcontrol();
+				c.setEditable(mEditable);
 			}
 		}
 	}

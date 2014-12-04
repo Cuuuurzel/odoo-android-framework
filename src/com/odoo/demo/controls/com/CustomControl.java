@@ -29,7 +29,6 @@ import com.odoo.orm.types.OReal;
 import com.odoo.orm.types.OText;
 import com.odoo.orm.types.OTimestamp;
 import com.odoo.orm.types.OVarchar;
-import com.odoo.util.logger.OLog;
 
 @SuppressLint("NewApi")
 public class CustomControl extends LinearLayout {
@@ -45,10 +44,11 @@ public class CustomControl extends LinearLayout {
 	private String[] labels = null;
 	private boolean mEditable = false, showIcon = true, show_label = true;
 	private View mControl = null;
-	private TextView label_view = null;
+	private TextView label_view = null, mTextView = null;
 	private int resId, tint_color = Color.BLACK;
 	private ImageView img_icon = null;
 	private ViewGroup container = null;
+	private CheckBox mCheckBox = null;
 
 	public enum Orientation {
 		Vertical, Horizantal;
@@ -131,7 +131,14 @@ public class CustomControl extends LinearLayout {
 		setImageIcon();
 	}
 
+	private void createTextView() {
+		mTextView = new TextView(mContext);
+		mTextView.setTextColor(Color.BLACK);
+	}
+
 	public void initcontrol() {
+		if (!getEditable())
+			createTextView();
 		initLayout();
 		View controlView = null;
 		if (show_label) {
@@ -158,17 +165,14 @@ public class CustomControl extends LinearLayout {
 		}
 		mControl = controlView;
 		container.addView(controlView);
-
 	}
 
 	private void setImageIcon() {
-		OLog.log("setting icon flag : " + showIcon + " with :" + resId);
 		if (showIcon) {
-			if (resId != 0) {
+			if (resId != 0)
 				img_icon.setImageResource(resId);
-				OLog.log("setting image...");
-			}
-			// img_icon.setColorFilter(tint_color);
+			if (tint_color != 0)
+				img_icon.setColorFilter(tint_color);
 		} else
 			img_icon.setVisibility(View.GONE);
 	}
@@ -176,6 +180,7 @@ public class CustomControl extends LinearLayout {
 	public <T> void setColumn(OColumn column) {
 		mType = getType(column.getType());
 		mColumn = column;
+		mLabel = column.getLabel();
 		setLabelText(mColumn.getLabel());
 	}
 
@@ -231,11 +236,31 @@ public class CustomControl extends LinearLayout {
 	public String getLabelText() {
 		if (mLabel != null)
 			return mLabel;
-		return mHint;
+		return getFieldName();
 	}
 
 	public void setValue(Object value) {
 		mValue = value;
+		switch (mType) {
+		case Text:
+			if (getEditable())
+				mEditText.setText(getValue().toString());
+			else
+				mTextView.setText(getValue().toString());
+			break;
+		case Boolean:
+			if (getEditable())
+				mCheckBox.setChecked(Boolean.getBoolean(getValue().toString()));
+			else
+				mTextView.setText(getCheckBoxLabel());
+			break;
+		case Chips:
+			break;
+		case ManyToOne:
+			break;
+		case Selection:
+			break;
+		}
 	}
 
 	public <T> T getValue() {
@@ -244,8 +269,7 @@ public class CustomControl extends LinearLayout {
 
 	public void setEditable(Boolean editable) {
 		mEditable = editable;
-		if (mControl != null)
-			mControl.setEnabled(editable);
+		initcontrol();
 	}
 
 	public boolean getEditable() {
@@ -268,16 +292,22 @@ public class CustomControl extends LinearLayout {
 		setOrientation(VERTICAL);
 		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT);
-		mEditText = new EditText(mContext);
-		mEditText.setTypeface(OControlHelper.lightFont());
-		mEditText.setLayoutParams(params);
-		mEditText.setBackgroundColor(Color.TRANSPARENT);
-		mEditText.setPadding(0, 10, 10, 10);
-		if (mValue != null) {
-			mEditText.setText(getValue().toString());
+		if (getEditable()) {
+			mEditText = new EditText(mContext);
+			mEditText.setTypeface(OControlHelper.lightFont());
+			mEditText.setLayoutParams(params);
+			mEditText.setBackgroundColor(Color.TRANSPARENT);
+			mEditText.setPadding(0, 10, 10, 10);
+			if (getValue() != null) {
+				mEditText.setText(getValue().toString());
+			}
+			mEditText.setHint(mHint);
+			return mEditText;
+		} else {
+			if (getValue() != null)
+				mTextView.setText(getValue().toString());
+			return mTextView;
 		}
-		mEditText.setHint(mHint);
-		return mEditText;
 
 	}
 
@@ -293,19 +323,33 @@ public class CustomControl extends LinearLayout {
 	}
 
 	private View initBooleanControl() {
-		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.MATCH_PARENT);
-		final CheckBox chkBox = new CheckBox(mContext);
-		chkBox.setLayoutParams(params);
-		if (getValue() != null) {
-			String bool_val = getValue().toString();
-			chkBox.setChecked(Boolean.parseBoolean(bool_val));
+		if (getEditable()) {
+			LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT,
+					LayoutParams.MATCH_PARENT);
+			mCheckBox = new CheckBox(mContext);
+			mCheckBox.setLayoutParams(params);
+			if (getValue() != null) {
+				String bool_val = getValue().toString();
+				mCheckBox.setChecked(Boolean.parseBoolean(bool_val));
+			}
+			if (getLabelText() != null)
+				mCheckBox.setText(getLabelText());
+			else
+				mCheckBox.setText(getFieldName());
+			return mCheckBox;
+		} else {
+			mTextView.setText(getCheckBoxLabel());
+			return mTextView;
 		}
-		if (mValue != null)
-			chkBox.setText(getLabelText());
-		else
-			chkBox.setText(getFieldName());
-		return chkBox;
+	}
+
+	private String getCheckBoxLabel() {
+		String label = "";
+		if (getValue() != null && Boolean.parseBoolean(getValue().toString())) {
+			label = "✔ ";
+		}
+		label += getLabelText();
+		return label;
 	}
 
 	private View initRadioGroup() {
