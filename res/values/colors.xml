@@ -27,6 +27,7 @@
 
     <!-- Form control Colors -->
     <color name="field_parent_background">#ebebeb</color>
+    <color name="control_selection_selected">#E0F7FA</color>
     <!--  -->
     <color name="odoo_purple">#a24689</color>
     <color name="odoo_green_dark">#669900</color>

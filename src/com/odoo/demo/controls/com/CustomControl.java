@@ -2,7 +2,12 @@ package com.odoo.demo.controls.com;
 
 import odoo.controls.OControlHelper;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -10,11 +15,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -32,12 +40,11 @@ import com.odoo.orm.types.OReal;
 import com.odoo.orm.types.OText;
 import com.odoo.orm.types.OTimestamp;
 import com.odoo.orm.types.OVarchar;
+import com.odoo.util.OControls;
 
-@SuppressLint("NewApi")
-public class CustomControl extends LinearLayout {
+public class CustomControl extends LinearLayout implements OnItemClickListener {
 
 	private Context mContext = null;
-	private boolean required = false;
 	private FieldType mType = FieldType.Text;
 	private OColumn mColumn = null;
 	private String mHint, mLabel, mField_name;
@@ -55,12 +62,8 @@ public class CustomControl extends LinearLayout {
 	private View mControl = null;
 	private Integer mValueArrayId = null;
 
-	public enum Orientation {
-		Vertical, Horizantal;
-	}
-
 	public enum WidgetType {
-		Switch, RadioGroup;
+		Switch, RadioGroup, SelectionDialog, Searchable;
 
 		public static WidgetType getWidgetType(int widget) {
 			switch (widget) {
@@ -68,6 +71,10 @@ public class CustomControl extends LinearLayout {
 				return WidgetType.Switch;
 			case 1:
 				return WidgetType.RadioGroup;
+			case 2:
+				return WidgetType.SelectionDialog;
+			case 3:
+				return WidgetType.Searchable;
 			}
 			return null;
 		}
@@ -317,6 +324,28 @@ public class CustomControl extends LinearLayout {
 			case ManyToOne:
 				break;
 			case Selection:
+
+				if (mWidgetType != null) {
+					switch (mWidgetType) {
+					case SelectionDialog:
+						TextView dialogView = (TextView) mControl;
+						Integer pos = Integer.parseInt(getValue().toString());
+						dialogView.setText(getLabels()[pos]);
+						AlertDialog dailog = (AlertDialog) dialogView.getTag();
+						dailog.dismiss();
+						break;
+					case Searchable:
+						TextView txvView = (TextView) mControl;
+						pos = Integer.parseInt(getValue().toString());
+						txvView.setText(getLabels()[pos]);
+						break;
+					default:
+					}
+				} else {
+					Spinner mSpinner = (Spinner) mControl;
+					int position = Integer.parseInt(getValue().toString());
+					mSpinner.setSelection(position);
+				}
 				break;
 			}
 		}
@@ -422,22 +451,32 @@ public class CustomControl extends LinearLayout {
 		return label;
 	}
 
-	private View initRadioGroup() {
-		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT);
+	private String[] getLabels() {
 		String[] labels = {};
 		if (mValueArrayId != null
 				&& !mContext.getClass().getSimpleName()
 						.contains("BridgeContext")) {
 			labels = mContext.getResources().getStringArray(
 					(Integer) mValueArrayId);
-
 		}
+		return labels;
+	}
+
+	private int getArrayPosition() {
 		int selected_position = -1;
-		if (getValue() != null && labels.length > 0) {
+		if (getValue() != null && getLabels().length > 0) {
 			selected_position = Integer.parseInt(getValue().toString());
 		}
+		return selected_position;
+	}
+
+	private View initRadioGroup() {
+		final LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT);
+		final String[] labels = getLabels();
+
 		if (mWidgetType != null) {
+			int array_pos = getArrayPosition();
 			switch (mWidgetType) {
 			case RadioGroup:
 				mradioGrp = new RadioGroup(mContext);
@@ -448,10 +487,62 @@ public class CustomControl extends LinearLayout {
 					rdoBtn.setText(label);
 					mradioGrp.addView(rdoBtn);
 				}
-				if (selected_position != -1)
-					((RadioButton) mradioGrp.getChildAt(selected_position))
+				if (array_pos != -1)
+					((RadioButton) mradioGrp.getChildAt(array_pos))
 							.setChecked(true);
 				return mradioGrp;
+			case SelectionDialog:
+				final TextView txvDialogValue = new TextView(mContext);
+				txvDialogValue.setLayoutParams(params);
+				int pos = array_pos;
+				if (pos == -1 && labels.length > 0)
+					pos = 0;
+				if (array_pos != -1) {
+					txvDialogValue.setText(labels[pos]);
+				} else
+					txvDialogValue.setText("Nothing Selected");
+				setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						AlertDialog dialog = createSelectionDialog(
+								getArrayPosition(), labels, params);
+						txvDialogValue.setTag(dialog);
+						dialog.show();
+					}
+				});
+				return txvDialogValue;
+			case Searchable:
+				TextView txvValue = new TextView(mContext);
+				txvValue.setLayoutParams(params);
+				pos = array_pos;
+				if (pos == -1 && labels.length > 0)
+					pos = 0;
+				if (array_pos != -1) {
+					txvValue.setText(labels[pos]);
+				} else
+					txvValue.setText("Nothing Selected");
+
+				setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						Intent intent = new Intent(mContext,
+								SearchableItemActivity.class);
+						intent.putExtra("labels", getLabels());
+						intent.putExtra("selected_position", getArrayPosition());
+						intent.putExtra("search_hint", getLabelText());
+						try {
+							mContext.unregisterReceiver(valueReceiver);
+						} catch (Exception e) {
+
+						}
+						mContext.registerReceiver(valueReceiver,
+								new IntentFilter("searchable_value_select"));
+						mContext.startActivity(intent);
+					}
+				});
+				return txvValue;
 			default:
 			}
 		}
@@ -460,9 +551,39 @@ public class CustomControl extends LinearLayout {
 		mSpinner.setLayoutParams(params);
 		mSpinner.setAdapter(new ArrayAdapter<String>(mContext,
 				android.R.layout.simple_list_item_1, labels));
-		if (selected_position != -1)
-			mSpinner.setSelection(selected_position);
+		if (getArrayPosition() != -1)
+			mSpinner.setSelection(getArrayPosition());
 		return mSpinner;
+	}
+
+	private AlertDialog createSelectionDialog(final int selected_position,
+			final String labels[], LayoutParams params) {
+		final AlertDialog.Builder builder = new Builder(mContext);
+		ListView dialogView = new ListView(mContext);
+		dialogView.setAdapter(new ArrayAdapter<String>(mContext,
+				android.R.layout.simple_expandable_list_item_1, labels) {
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+				View v = convertView;
+				if (v == null)
+					v = LayoutInflater.from(mContext).inflate(
+							android.R.layout.simple_expandable_list_item_1,
+							parent, false);
+				OControls.setText(v, android.R.id.text1, labels[position]);
+				if (selected_position == position) {
+					v.setBackgroundColor(mContext.getResources().getColor(
+							R.color.control_selection_selected));
+				} else {
+					v.setBackgroundColor(Color.TRANSPARENT);
+				}
+				return v;
+			}
+		});
+		dialogView.setTag(labels);
+		dialogView.setOnItemClickListener(this);
+		dialogView.setLayoutParams(params);
+		builder.setView(dialogView);
+		return builder.create();
 	}
 
 	public void setIcon(int resourceId) {
@@ -472,4 +593,20 @@ public class CustomControl extends LinearLayout {
 	public int getIcon() {
 		return resId;
 	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		setValue(position);
+	}
+
+	BroadcastReceiver valueReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			setValue(intent.getIntExtra("selected_position", 0));
+			mContext.unregisterReceiver(valueReceiver);
+		}
+	};
+
 }

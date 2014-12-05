@@ -76,7 +76,7 @@
         <com.odoo.demo.controls.com.CustomControl
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            odoo:control_label="Names"
+            odoo:control_label="Names (Spinner)"
             odoo:default_value="2"
             odoo:fieldType="Selection"
             odoo:ofield_name="dimple_soni"
@@ -91,7 +91,27 @@
         <com.odoo.demo.controls.com.CustomControl
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            odoo:control_label="Names (Radio)"
+            odoo:control_label="Names (Selection Dialog)"
+            odoo:customWidget="SelectionDialog"
+            odoo:default_value="1"
+            odoo:fieldType="Selection"
+            odoo:ofield_name="dimple_soni"
+            odoo:value_array="@array/selection_names" />
+
+        <com.odoo.demo.controls.com.CustomControl
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            odoo:control_label="Names (Selection Dialog)"
+            odoo:customWidget="Searchable"
+            odoo:default_value="1"
+            odoo:fieldType="Selection"
+            odoo:ofield_name="dimple_soni"
+            odoo:value_array="@array/selection_names" />
+
+        <com.odoo.demo.controls.com.CustomControl
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            odoo:control_label="Names (Radio Group)"
             odoo:customWidget="RadioGroup"
             odoo:default_value="1"
             odoo:fieldType="Selection"

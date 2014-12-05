@@ -71,7 +71,8 @@
             android:label="@string/title_activity_user_profile"
             android:theme="@style/ProfileActivityTheme" >
         </activity>
-
+       <activity android:name="com.odoo.demo.controls.com.SearchableItemActivity" >
+        </activity>
         <!-- Base Providers (Note: update authority as per your app package) -->
         <provider
             android:name=".base.ir.providers.model.ModelProvider"
@@ -103,27 +104,6 @@
             android:authorities="com.odoo.addons.partners.providers.country_state"
             android:exported="false"
             android:multiprocess="true" />
-
-        <!-- /Base Providers -->
-        <!-- Contact service -->
-        <!--
-        <service
-            android:name="com.odoo.base.res.services.ContactSyncService"
-            android:exported="true"
-            android:process=":contacts" >
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_contacts" />
-            <meta-data
-                android:name="android.provider.CONTACTS_STRUCTURE"
-                android:resource="@xml/contacts" />
-        </service>
-        -->
-
 
         <!-- ResPartner Provider -->
         <provider
