@@ -2,6 +2,7 @@ package com.odoo.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -62,9 +63,9 @@ public class OControls {
 			long duration, Context context) {
 		View view = parent_view.findViewById(resource_id);
 		view.setVisibility(View.VISIBLE);
-//		Animation animate = AnimationUtils.loadAnimation(context,
-//				R.anim.slide_in_from_left);
-//		view.startAnimation(animate);
+		// Animation animate = AnimationUtils.loadAnimation(context,
+		// R.anim.slide_in_from_left);
+		// view.startAnimation(animate);
 
 	}
 
@@ -72,9 +73,9 @@ public class OControls {
 			long duration, Context context) {
 		View view = parent_view.findViewById(resource_id);
 		view.setVisibility(View.VISIBLE);
-//		Animation animate = AnimationUtils.loadAnimation(context,
-//				R.anim.slide_in_from_left);
-//		view.startAnimation(animate);
+		// Animation animate = AnimationUtils.loadAnimation(context,
+		// R.anim.slide_in_from_left);
+		// view.startAnimation(animate);
 
 	}
 
@@ -94,6 +95,16 @@ public class OControls {
 		} else {
 			OControls.slideOutToRight(parent_view, resource_id, 500, context);
 		}
+	}
+
+	public static void makeBold(View parent, int res_id) {
+		TextView txv = (TextView) parent.findViewById(res_id);
+		txv.setTypeface(txv.getTypeface(), Typeface.BOLD);
+	}
+
+	public static void removeBold(View parent, int res_id) {
+		TextView txv = (TextView) parent.findViewById(res_id);
+		txv.setTypeface(txv.getTypeface(), Typeface.NORMAL);
 	}
 
 }

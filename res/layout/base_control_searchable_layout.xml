@@ -11,12 +11,17 @@
         android:layout_height="56dp"
         android:background="#ffffff"
         android:orientation="horizontal"
-        android:paddingLeft="16dp" >
+        android:paddingLeft="0dp"
+        android:paddingRight="16dp" >
 
         <ImageView
+            android:id="@+id/search_icon"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:src="@drawable/ic_action_search"
             android:tint="#414141" />
 
@@ -24,12 +29,13 @@
             android:id="@+id/edt_searchable_input"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
+            android:ellipsize="end"
             android:fontFamily="@string/font_fontFamily_medium"
             android:gravity="center_vertical"
             android:hint="Search"
+            android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium" >
 
             <requestFocus />

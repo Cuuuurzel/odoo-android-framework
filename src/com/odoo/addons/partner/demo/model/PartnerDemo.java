@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.odoo.R;
@@ -16,11 +17,13 @@ import com.odoo.demo.controls.com.CustomForm;
 import com.odoo.orm.ODataRow;
 import com.odoo.support.fragment.BaseFragment;
 import com.odoo.util.drawer.DrawerItem;
+import com.odoo.util.logger.OLog;
 
-public class PartnerDemo extends BaseFragment {
+public class PartnerDemo extends BaseFragment implements OnClickListener {
 
 	View mView = null;
 	ODataRow row = null;
+	CustomForm cForm = null;
 
 	public enum Keys {
 		Demo
@@ -37,16 +40,17 @@ public class PartnerDemo extends BaseFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		view.findViewById(R.id.toggleMode).setOnClickListener(this);
 		init();
 	}
 
 	private void init() {
-		CustomForm cForm = (CustomForm) mView.findViewById(R.id.form);
+		cForm = (CustomForm) mView.findViewById(R.id.form);
 		row = new ODataRow();
 		ResPartner resPartner = new ResPartner(getActivity());
-		row = resPartner.select(5);
-		cForm.setEditable(true);
+		row = resPartner.select(6);
 		cForm.setData(row);
+		cForm.setEditable(true);
 	}
 
 	@Override
@@ -69,6 +73,12 @@ public class PartnerDemo extends BaseFragment {
 		args.putString("id", "5");
 		f.setArguments(args);
 		return f;
+	}
+
+	@Override
+	public void onClick(View v) {
+		cForm.setEditable(!cForm.getEditable());
+		OLog.log(">>>>>>>>>>> " + cForm.getValues());
 	}
 
 }

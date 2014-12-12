@@ -1916,6 +1916,10 @@ public class OModel extends OSQLiteHelper implements OModelHelper {
 		return new OContentResolver(this, mContext);
 	}
 
+	@Override
+	public String toString() {
+		return "MODEL : " + getModelName();
+	}
 }
 
 /**

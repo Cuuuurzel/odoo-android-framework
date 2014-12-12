@@ -15,6 +15,7 @@ import com.odoo.R;
 import com.odoo.orm.OColumn;
 import com.odoo.orm.ODataRow;
 import com.odoo.orm.OModel;
+import com.odoo.orm.OValues;
 
 @SuppressLint("NewApi")
 public class CustomForm extends LinearLayout {
@@ -95,6 +96,7 @@ public class CustomForm extends LinearLayout {
 	public void initForm(ODataRow record) {
 		mRecord = new ODataRow();
 		mRecord = record;
+		initForm();
 	}
 
 	public void initForm() {
@@ -105,15 +107,19 @@ public class CustomForm extends LinearLayout {
 			View v = mFormFieldControls.get(key);
 			if (v instanceof CustomControl) {
 				CustomControl c = (CustomControl) v;
+				c.setModel(model);
 				OColumn column = model.getColumn(c.getFieldName());
 				if (column != null) {
 					c.setColumn(column);
 				}
-				c.setEditable(getEditable());
-				if (mRecord != null && mRecord.contains(c.getFieldName())) {
-					// setting value to control
-					c.setValue(mRecord.get(c.getFieldName()));
+				c.initcontrol();
+				Object val = c.getValue();
+				if (mRecord != null) {
+					if (mRecord.contains(c.getFieldName()))
+						val = mRecord.get(c.getFieldName());
 				}
+				if (val != null)
+					c.setValue(val);
 			}
 		}
 	}
@@ -130,5 +136,14 @@ public class CustomForm extends LinearLayout {
 				mFormFieldControls.put(field.getFieldName(), field);
 			}
 		}
+	}
+
+	public OValues getValues() {
+		OValues values = new OValues();
+		for (String key : mFormFieldControls.keySet()) {
+			CustomControl control = mFormFieldControls.get(key);
+			values.put(key, control.getValue());
+		}
+		return values;
 	}
 }

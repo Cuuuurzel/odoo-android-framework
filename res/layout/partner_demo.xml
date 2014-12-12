@@ -11,6 +11,12 @@
         android:orientation="vertical"
         odoo:modelName="res.partner" >
 
+        <Button
+            android:id="@+id/toggleMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Toggle Edit Mode" />
+
         <com.odoo.demo.controls.com.CustomControl
             android:id="@+id/controltxt1"
             android:layout_width="match_parent"
@@ -76,11 +82,11 @@
         <com.odoo.demo.controls.com.CustomControl
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            odoo:control_label="Names (Spinner)"
-            odoo:default_value="2"
-            odoo:fieldType="Selection"
-            odoo:ofield_name="dimple_soni"
-            odoo:value_array="@array/selection_names" />
+            odoo:customWidget="Searchable"
+            odoo:icon_resource="@drawable/ic_action_user"
+            odoo:icon_tint="@color/theme_secondary_dark"
+            odoo:ofield_name="parent_id" >
+        </com.odoo.demo.controls.com.CustomControl>
 
         <View
             android:layout_width="match_parent"
@@ -91,31 +97,11 @@
         <com.odoo.demo.controls.com.CustomControl
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            odoo:control_label="Names (Selection Dialog)"
-            odoo:customWidget="SelectionDialog"
-            odoo:default_value="1"
-            odoo:fieldType="Selection"
-            odoo:ofield_name="dimple_soni"
-            odoo:value_array="@array/selection_names" />
-
-        <com.odoo.demo.controls.com.CustomControl
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            odoo:control_label="Names (Selection Dialog)"
+            odoo:control_label="Names (Searchable)"
             odoo:customWidget="Searchable"
             odoo:default_value="1"
             odoo:fieldType="Selection"
-            odoo:ofield_name="dimple_soni"
-            odoo:value_array="@array/selection_names" />
-
-        <com.odoo.demo.controls.com.CustomControl
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            odoo:control_label="Names (Radio Group)"
-            odoo:customWidget="RadioGroup"
-            odoo:default_value="1"
-            odoo:fieldType="Selection"
-            odoo:ofield_name="dimple_soni"
+            odoo:ofield_name="searchable_name"
             odoo:value_array="@array/selection_names" />
     </com.odoo.demo.controls.com.CustomForm>
 

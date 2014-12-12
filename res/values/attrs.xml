@@ -105,6 +105,7 @@
             <enum name="RadioGroup" value="1" />
             <enum name="SelectionDialog" value="2" />
             <enum name="Searchable" value="3" />
+            <enum name="SearchableLive" value="4" />
         </attr>
         <attr name="with_bottom_padding" format="boolean" />
         <attr name="with_top_padding" format="boolean" />
