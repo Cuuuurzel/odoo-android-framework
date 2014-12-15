@@ -29,6 +29,7 @@ import com.odoo.orm.types.OReal;
 import com.odoo.orm.types.OText;
 import com.odoo.orm.types.OTimestamp;
 import com.odoo.orm.types.OVarchar;
+import com.odoo.util.ODate;
 
 public class OField extends LinearLayout implements ValueUpdateListener {
 
@@ -53,7 +54,7 @@ public class OField extends LinearLayout implements ValueUpdateListener {
 	private OControlData mControlData = null;
 
 	public enum WidgetType {
-		Switch, RadioGroup, SelectionDialog, Searchable, SearchableLive;
+		Switch, RadioGroup, SelectionDialog, Searchable, SearchableLive, Image;
 
 		public static WidgetType getWidgetType(int widget) {
 			switch (widget) {
@@ -67,13 +68,15 @@ public class OField extends LinearLayout implements ValueUpdateListener {
 				return WidgetType.Searchable;
 			case 4:
 				return WidgetType.SearchableLive;
+			case 5:
+				return WidgetType.Image;
 			}
 			return null;
 		}
 	}
 
 	public enum FieldType {
-		Text, Boolean, ManyToOne, Chips, Selection, Date, DateTime;
+		Text, Boolean, ManyToOne, Chips, Selection, Date, DateTime, Blob;
 
 		public static FieldType getTypeValue(int type_val) {
 			switch (type_val) {
@@ -91,6 +94,8 @@ public class OField extends LinearLayout implements ValueUpdateListener {
 				return FieldType.Date;
 			case 6:
 				return FieldType.DateTime;
+			case 7:
+				return FieldType.Blob;
 			}
 			return FieldType.Text;
 		}
@@ -123,32 +128,26 @@ public class OField extends LinearLayout implements ValueUpdateListener {
 		mContext = context;
 		if (attrs != null) {
 			TypedArray types = mContext.obtainStyledAttributes(attrs,
-					R.styleable.customcontrol);
-			mField_name = types
-					.getString(R.styleable.customcontrol_ofield_name);
-			resId = types.getResourceId(
-					R.styleable.customcontrol_icon_resource, 0);
-			showIcon = types.getBoolean(R.styleable.customcontrol_show_icon,
-					true);
-			tint_color = types.getColor(R.styleable.customcontrol_icon_tint, 0);
-			show_label = types.getBoolean(R.styleable.customcontrol_show_label,
-					true);
-			int type_value = types.getInt(R.styleable.customcontrol_fieldType,
-					0);
+					R.styleable.OFieldV2);
+			mField_name = types.getString(R.styleable.OFieldV2_fieldName);
+			resId = types.getResourceId(R.styleable.OFieldV2_iconResource, 0);
+			showIcon = types.getBoolean(R.styleable.OFieldV2_showIcon, true);
+			tint_color = types.getColor(R.styleable.OFieldV2_iconTint, 0);
+			show_label = types.getBoolean(R.styleable.OFieldV2_showLabel, true);
+			int type_value = types.getInt(R.styleable.OFieldV2_fieldType, 0);
 			mType = FieldType.getTypeValue(type_value);
 
 			with_bottom_padding = types.getBoolean(
-					R.styleable.customcontrol_with_bottom_padding, true);
+					R.styleable.OFieldV2_withBottomPadding, true);
 			with_top_padding = types.getBoolean(
-					R.styleable.customcontrol_with_top_padding, true);
-			mLabel = types.getString(R.styleable.customcontrol_control_label);
-			mValue = types.getString(R.styleable.customcontrol_default_value);
-			mParsePattern = types
-					.getString(R.styleable.customcontrol_parse_pattern);
+					R.styleable.OFieldV2_withTopPadding, true);
+			mLabel = types.getString(R.styleable.OFieldV2_controlLabel);
+			mValue = types.getString(R.styleable.OFieldV2_defaultValue);
+			mParsePattern = types.getString(R.styleable.OFieldV2_parsePattern);
 			mValueArrayId = types.getResourceId(
-					R.styleable.customcontrol_value_array, -1);
+					R.styleable.OFieldV2_valueArray, -1);
 			mWidgetType = WidgetType.getWidgetType(types.getInt(
-					R.styleable.customcontrol_customWidget, -1));
+					R.styleable.OFieldV2_customWidget, -1));
 			types.recycle();
 		}
 		if (mContext.getClass().getSimpleName().contains("BridgeContext"))
@@ -200,6 +199,9 @@ public class OField extends LinearLayout implements ValueUpdateListener {
 		case DateTime:
 			controlView = initDateTimeControl(mType);
 			break;
+		case Blob:
+			controlView = initBlobControl();
+			break;
 		default:
 			break;
 		}
@@ -223,6 +225,11 @@ public class OField extends LinearLayout implements ValueUpdateListener {
 	public <T> void setColumn(OColumn column) {
 		mColumn = column;
 		mType = getType(column.getType());
+		if (mType == FieldType.DateTime) {
+			if (column.getParsePattern().equals(ODate.DEFAULT_DATE_FORMAT)) {
+				mType = FieldType.Date;
+			}
+		}
 		if (label_view != null) {
 			label_view.setText(getLabelText());
 		}
@@ -246,18 +253,18 @@ public class OField extends LinearLayout implements ValueUpdateListener {
 
 			// Blob
 			if (type_class.isAssignableFrom(OBlob.class)) {
-				return null;
+				return FieldType.Blob;
 			}
 			// DateTime
 			if (type_class.isAssignableFrom(ODateTime.class)
 					|| type_class.isAssignableFrom(OTimestamp.class)) {
-				return null;
+				return FieldType.DateTime;
 			}
 			// Text
 			if (type_class.isAssignableFrom(OText.class)) {
 				return FieldType.Text;
 			}
-			// Text
+			// TODO: WebView
 			if (type_class.isAssignableFrom(OHtml.class)) {
 				return null;
 			}
@@ -344,6 +351,7 @@ public class OField extends LinearLayout implements ValueUpdateListener {
 		return selection;
 	}
 
+	// Datetime (dialog with date or date time)
 	private View initDateTimeControl(FieldType type) {
 		ODateTimeField datetime = new ODateTimeField(mContext);
 		mControlData = datetime;
@@ -352,6 +360,15 @@ public class OField extends LinearLayout implements ValueUpdateListener {
 		datetime.setLabelText(getLabelText());
 		datetime.setColumn(mColumn);
 		return datetime;
+	}
+
+	// Blob (file contents)
+	private View initBlobControl() {
+		OBlobField blob = new OBlobField(mContext);
+		mControlData = blob;
+		blob.setLabelText(getLabelText());
+		blob.setColumn(mColumn);
+		return blob;
 	}
 
 	private TextView getLabelView() {

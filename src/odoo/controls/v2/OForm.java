@@ -3,6 +3,7 @@ package odoo.controls.v2;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -67,13 +68,15 @@ public class OForm extends LinearLayout {
 		mContext = context;
 		if (attrs != null) {
 			TypedArray types = mContext.obtainStyledAttributes(attrs,
-					R.styleable.customform);
-			mModel = types.getString(R.styleable.customform_modelName);
-			mEditable = types.getBoolean(R.styleable.customform_editableMode,
+					R.styleable.OFormV2);
+			mModel = types.getString(R.styleable.OFormV2_modelName);
+			mEditable = types.getBoolean(R.styleable.OFormV2_editableMode,
 					false);
 			types.recycle();
 		}
 		initForm();
+		LayoutTransition transition = new LayoutTransition();
+		setLayoutTransition(transition);
 	}
 
 	public boolean getEditable() {
@@ -89,9 +92,7 @@ public class OForm extends LinearLayout {
 	}
 
 	public void setData(ODataRow record) {
-		mRecord = new ODataRow();
-		mRecord = record;
-		initForm();
+		initForm(record);
 	}
 
 	public ODataRow getData() {
@@ -104,7 +105,7 @@ public class OForm extends LinearLayout {
 		initForm();
 	}
 
-	public void initForm() {
+	private void initForm() {
 		findAllFields(this);
 		model = OModel.get(mContext, mModel);
 		setOrientation(VERTICAL);

@@ -88,14 +88,13 @@
     <declare-styleable name="ODrawerScrollView">
         <attr name="insetForeground" format="reference|color" />
     </declare-styleable>
-    <declare-styleable name="customcontrol">
-        <attr name="ofield_name" format="string" />
-        <attr name="radio_label" format="string" />
-        <attr name="icon_resource" format="reference" />
-        <attr name="show_icon" format="boolean" />
-        <attr name="show_label" format="boolean" />
-        <attr name="icon_tint" format="reference|color" />
-        <attr name="parse_pattern" format="string" />
+    <declare-styleable name="OFieldV2">
+        <attr name="fieldName" format="string" />
+        <attr name="iconResource" format="reference" />
+        <attr name="showIcon" format="boolean" />
+        <attr name="showLabel" format="boolean" />
+        <attr name="iconTint" format="reference|color" />
+        <attr name="parsePattern" format="string" />
         <attr name="fieldType">
             <enum name="Text" value="0" />
             <enum name="Boolean" value="1" />
@@ -104,6 +103,7 @@
             <enum name="Selection" value="4" />
             <enum name="Date" value="5" />
             <enum name="DateTime" value="6" />
+            <enum name="Blob" value="7" />
         </attr>
         <attr name="customWidget">
             <enum name="Switch" value="0" />
@@ -111,16 +111,17 @@
             <enum name="SelectionDialog" value="2" />
             <enum name="Searchable" value="3" />
             <enum name="SearchableLive" value="4" />
+            <enum name="Image" value="5" />
         </attr>
-        <attr name="with_bottom_padding" format="boolean" />
-        <attr name="with_top_padding" format="boolean" />
-        <attr name="control_label" format="string|reference" />
-        <attr name="default_value" format="string|reference" />
-        <attr name="value_array" format="reference" />
+        <attr name="withBottomPadding" format="boolean" />
+        <attr name="withTopPadding" format="boolean" />
+        <attr name="controlLabel" format="string|reference" />
+        <attr name="defaultValue" format="string|reference" />
+        <attr name="valueArray" format="reference" />
     </declare-styleable>
-    <declare-styleable name="customform">
+    <declare-styleable name="OFormV2">
         <attr name="editableMode" format="boolean" />
-        <attr name="modelName" format="string"></attr>
+        <attr name="modelName" format="string" />
     </declare-styleable>
 
 </resources>

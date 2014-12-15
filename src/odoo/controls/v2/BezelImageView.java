@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package odoo.controls;
+package odoo.controls.v2;
 
 import android.content.Context;
 import android.content.res.TypedArray;

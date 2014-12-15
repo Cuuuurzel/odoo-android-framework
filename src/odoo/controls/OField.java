@@ -28,6 +28,7 @@ import odoo.controls.OManyToOneWidget.ManyToOneItemChangeListener;
 import odoo.controls.OSearchableMany2One.DialogListRowViewListener;
 import odoo.controls.OTagsView.CustomTagViewListener;
 import odoo.controls.OTagsView.NewTokenCreateListener;
+import odoo.controls.v2.BezelImageView;
 import odoo.controls.v2.OnChangeCallback;
 import odoo.controls.v2.OnDomainFilterCallbacks;
 import android.annotation.SuppressLint;
