@@ -1,4 +1,4 @@
-package com.odoo.demo.controls.com;
+package odoo.controls.v2;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

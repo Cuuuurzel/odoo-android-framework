@@ -1,4 +1,4 @@
-package com.odoo.demo.controls.com;
+package odoo.controls.v2;
 
 import java.util.ArrayList;
 import java.util.List;

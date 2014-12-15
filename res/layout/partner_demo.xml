@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.odoo.demo.controls.com.CustomForm
+    <odoo.controls.v2.OForm
         android:id="@+id/form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="Toggle Edit Mode" />
 
-        <com.odoo.demo.controls.com.CustomControl
+        <odoo.controls.v2.OField
             android:id="@+id/controltxt1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,14 +25,27 @@
             odoo:ofield_name="name"
             odoo:show_icon="false"
             odoo:show_label="false" >
-        </com.odoo.demo.controls.com.CustomControl>
+        </odoo.controls.v2.OField>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#cccccc" />
 
-        <com.odoo.demo.controls.com.CustomControl
+        <odoo.controls.v2.OField
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            odoo:icon_resource="@drawable/ic_action_user"
+            odoo:icon_tint="@color/theme_secondary_dark"
+            odoo:ofield_name="parent_id" >
+        </odoo.controls.v2.OField>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#cccccc" />
+
+        <odoo.controls.v2.OField
             android:id="@+id/controltxt2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,16 +55,16 @@
             odoo:ofield_name="is_company"
             odoo:show_label="false"
             odoo:with_bottom_padding="false" >
-        </com.odoo.demo.controls.com.CustomControl>
+        </odoo.controls.v2.OField>
 
-        <com.odoo.demo.controls.com.CustomControl
+        <odoo.controls.v2.OField
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             odoo:customWidget="Switch"
             odoo:ofield_name="customer"
             odoo:show_label="false"
             odoo:with_top_padding="false" >
-        </com.odoo.demo.controls.com.CustomControl>
+        </odoo.controls.v2.OField>
 
         <View
             android:layout_width="match_parent"
@@ -59,19 +72,45 @@
             android:layout_marginLeft="72dp"
             android:background="#cccccc" />
 
-        <com.odoo.demo.controls.com.CustomControl
-            android:id="@+id/controlchk3"
+        <odoo.controls.v2.OField
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            odoo:customWidget="Searchable"
+            odoo:ofield_name="country_id" >
+        </odoo.controls.v2.OField>
+
+        <odoo.controls.v2.OField
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             odoo:ofield_name="street" >
-        </com.odoo.demo.controls.com.CustomControl>
+        </odoo.controls.v2.OField>
 
-        <com.odoo.demo.controls.com.CustomControl
+        <odoo.controls.v2.OField
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            odoo:ofield_name="state_id" >
+        </odoo.controls.v2.OField>
+
+        <odoo.controls.v2.OField
+            android:id="@+id/controlrdobtn4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            odoo:ofield_name="city" >
+        </odoo.controls.v2.OField>
+
+        <odoo.controls.v2.OField
+            android:id="@+id/controlrdobtn4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            odoo:ofield_name="website" >
+        </odoo.controls.v2.OField>
+
+        <odoo.controls.v2.OField
             android:id="@+id/controlrdobtn4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             odoo:ofield_name="zip" >
-        </com.odoo.demo.controls.com.CustomControl>
+        </odoo.controls.v2.OField>
 
         <View
             android:layout_width="match_parent"
@@ -79,38 +118,25 @@
             android:layout_marginLeft="72dp"
             android:background="#cccccc" />
 
-        <com.odoo.demo.controls.com.CustomControl
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            odoo:customWidget="SearchableLive"
-            odoo:icon_resource="@drawable/ic_action_user"
-            odoo:icon_tint="@color/theme_secondary_dark"
-            odoo:ofield_name="parent_id" >
-        </com.odoo.demo.controls.com.CustomControl>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="72dp"
-            android:background="#cccccc" />
-
-        <com.odoo.demo.controls.com.CustomControl
+        <odoo.controls.v2.OField
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             odoo:control_label="Date Control"
             odoo:default_value="now()"
             odoo:fieldType="Date"
             odoo:ofield_name="date_control_test"
-            odoo:parse_pattern="MMMM dd, yyyy" />
+            odoo:parse_pattern="MMMM dd, yyyy" >
+        </odoo.controls.v2.OField>
 
-        <com.odoo.demo.controls.com.CustomControl
+        <odoo.controls.v2.OField
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             odoo:control_label="Date Time Control"
             odoo:default_value="now()"
             odoo:fieldType="DateTime"
-            odoo:parse_pattern="MMMM dd, yyyy hh:mm a"
-            odoo:ofield_name="datetime_control_test" />
+            odoo:ofield_name="datetime_control_test"
+            odoo:parse_pattern="MMMM dd, yyyy hh:mm a" >
+        </odoo.controls.v2.OField>
 
         <View
             android:layout_width="match_parent"
@@ -118,7 +144,7 @@
             android:layout_marginLeft="72dp"
             android:background="#cccccc" />
 
-        <com.odoo.demo.controls.com.CustomControl
+        <odoo.controls.v2.OField
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             odoo:control_label="Names (Searchable)"
@@ -126,7 +152,8 @@
             odoo:default_value="1"
             odoo:fieldType="Selection"
             odoo:ofield_name="searchable_name"
-            odoo:value_array="@array/selection_names" />
-    </com.odoo.demo.controls.com.CustomForm>
+            odoo:value_array="@array/selection_names" >
+        </odoo.controls.v2.OField>
+    </odoo.controls.v2.OForm>
 
 </ScrollView>

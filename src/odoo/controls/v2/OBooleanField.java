@@ -1,4 +1,4 @@
-package com.odoo.demo.controls.com;
+package odoo.controls.v2;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -19,12 +19,13 @@ public class OBooleanField extends LinearLayout implements OControlData,
 	private Boolean mEditable = false;
 	private String mLabel = null;
 	private Boolean mValue = false;
-	private CustomControl.WidgetType mWidget = null;
+	private OField.WidgetType mWidget = null;
 	private ValueUpdateListener mValueUpdateListener = null;
 	// Controls
 	private TextView txvView = null;
 	private CheckBox mCheckbox = null;
 	private Switch mSwitch = null;
+	private Boolean mReady = false;
 
 	public OBooleanField(Context context, AttributeSet attrs, int defStyleAttr,
 			int defStyleRes) {
@@ -58,6 +59,7 @@ public class OBooleanField extends LinearLayout implements OControlData,
 	}
 
 	public void initControl() {
+		mReady = false;
 		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT);
 		removeAllViews();
@@ -141,7 +143,7 @@ public class OBooleanField extends LinearLayout implements OControlData,
 		return mEditable;
 	}
 
-	public void setWidgetType(CustomControl.WidgetType type) {
+	public void setWidgetType(OField.WidgetType type) {
 		mWidget = type;
 		initControl();
 	}
@@ -184,5 +186,21 @@ public class OBooleanField extends LinearLayout implements OControlData,
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		setValue(isChecked);
+	}
+
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		mReady = true;
+	}
+
+	@Override
+	public Boolean isControlReady() {
+		return mReady;
+	}
+
+	@Override
+	public void resetData() {
+		setValue(getValue());
 	}
 }

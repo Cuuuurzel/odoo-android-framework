@@ -1,7 +1,12 @@
-package com.odoo.demo.controls.com;
+package odoo.controls.v2;
 
 import java.util.Date;
 import java.util.TimeZone;
+
+import odoo.controls.v2.OField.FieldType;
+import odoo.controls.v2.DateTimePicker.Builder;
+import odoo.controls.v2.DateTimePicker.PickerCallBack;
+import odoo.controls.v2.DateTimePicker.Type;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -10,10 +15,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.odoo.demo.controls.com.CustomControl.FieldType;
-import com.odoo.demo.controls.com.DateTimePicker.Builder;
-import com.odoo.demo.controls.com.DateTimePicker.PickerCallBack;
-import com.odoo.demo.controls.com.DateTimePicker.Type;
 import com.odoo.orm.OColumn;
 import com.odoo.util.ODate;
 
@@ -31,6 +32,7 @@ public class ODateTimeField extends LinearLayout implements OControlData,
 	private String mParsePattern = ODate.DEFAULT_DATE_FORMAT;
 	private DateTimePicker.Builder builder = null;
 	private String mDate;
+	private Boolean mReady = false;
 
 	public ODateTimeField(Context context, AttributeSet attrs,
 			int defStyleAttr, int defStyleRes) {
@@ -59,6 +61,7 @@ public class ODateTimeField extends LinearLayout implements OControlData,
 		if (attrs != null) {
 
 		}
+		mReady = false;
 		initControl();
 	}
 
@@ -196,5 +199,21 @@ public class ODateTimeField extends LinearLayout implements OControlData,
 	public void setParsePattern(String parsePattern) {
 		if (parsePattern != null)
 			mParsePattern = parsePattern;
+	}
+
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		mReady = true;
+	}
+
+	@Override
+	public Boolean isControlReady() {
+		return mReady;
+	}
+
+	@Override
+	public void resetData() {
+		setValue(getValue());
 	}
 }

@@ -1,4 +1,4 @@
-package com.odoo.demo.controls.com;
+package odoo.controls.v2;
 
 import odoo.controls.OControlHelper;
 import android.content.Context;
@@ -12,34 +12,34 @@ import android.widget.TextView;
 
 import com.odoo.orm.OColumn;
 
-public class OEditText extends LinearLayout implements OControlData,
+public class OEditTextField extends LinearLayout implements OControlData,
 		OnFocusChangeListener {
 
 	private Context mContext;
 	private EditText edtText;
 	private TextView txvText;
-	private Boolean mEditable = false;
+	private Boolean mEditable = false, mReady = false;;
 	private OColumn mColumn;
 	private String mLabel, mHint;
 	private ValueUpdateListener mValueUpdateListener = null;
 
-	public OEditText(Context context, AttributeSet attrs, int defStyleAttr,
-			int defStyleRes) {
+	public OEditTextField(Context context, AttributeSet attrs,
+			int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
 		init(context, attrs, defStyleAttr, defStyleRes);
 	}
 
-	public OEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+	public OEditTextField(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		init(context, attrs, defStyleAttr, 0);
 	}
 
-	public OEditText(Context context, AttributeSet attrs) {
+	public OEditTextField(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context, attrs, 0, 0);
 	}
 
-	public OEditText(Context context) {
+	public OEditTextField(Context context) {
 		super(context);
 		init(context, null, 0, 0);
 	}
@@ -50,6 +50,7 @@ public class OEditText extends LinearLayout implements OControlData,
 		if (attrs != null) {
 
 		}
+		mReady = false;
 		if (mContext.getClass().getSimpleName().contains("BridgeContext"))
 			initControl();
 	}
@@ -149,5 +150,21 @@ public class OEditText extends LinearLayout implements OControlData,
 		if (!hasFocus && edtText.getText().length() > 0) {
 			setValue(edtText.getText());
 		}
+	}
+
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		mReady = true;
+	}
+
+	@Override
+	public Boolean isControlReady() {
+		return mReady;
+	}
+
+	@Override
+	public void resetData() {
+		setValue(getValue());
 	}
 }

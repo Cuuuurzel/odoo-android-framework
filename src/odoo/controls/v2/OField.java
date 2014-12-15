@@ -1,5 +1,6 @@
-package com.odoo.demo.controls.com;
+package odoo.controls.v2;
 
+import odoo.controls.v2.OControlData.ValueUpdateListener;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,9 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.odoo.R;
-import com.odoo.demo.controls.com.OControlData.ValueUpdateListener;
 import com.odoo.orm.OColumn;
+import com.odoo.orm.OColumn.ColumnDomain;
 import com.odoo.orm.OColumn.RelationType;
+import com.odoo.orm.ODataRow;
 import com.odoo.orm.OModel;
 import com.odoo.orm.types.OBlob;
 import com.odoo.orm.types.OBoolean;
@@ -28,7 +30,7 @@ import com.odoo.orm.types.OText;
 import com.odoo.orm.types.OTimestamp;
 import com.odoo.orm.types.OVarchar;
 
-public class CustomControl extends LinearLayout implements ValueUpdateListener {
+public class OField extends LinearLayout implements ValueUpdateListener {
 
 	private Context mContext = null;
 	private FieldType mType = FieldType.Text;
@@ -44,7 +46,9 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 	private Boolean with_bottom_padding = true, with_top_padding = true;
 	private WidgetType mWidgetType = null;
 	private String mParsePattern = null;
-
+	private OnChangeCallback mOnChangeCallback = null;
+	private OnDomainFilterCallbacks mOnDomainFilterCallbacks = null;
+	private ColumnDomain mColumnDomain = null;
 	// Controls
 	private OControlData mControlData = null;
 
@@ -92,24 +96,24 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 		}
 	}
 
-	public CustomControl(Context context) {
+	public OField(Context context) {
 		super(context);
 		init(context, null, 0, 0);
 	}
 
-	public CustomControl(Context context, AttributeSet attrs, int defStyleAttr,
+	public OField(Context context, AttributeSet attrs, int defStyleAttr,
 			int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
 		init(context, attrs, defStyleAttr, defStyleRes);
 	}
 
 	@SuppressLint("NewApi")
-	public CustomControl(Context context, AttributeSet attrs, int defStyleAttr) {
+	public OField(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		init(context, attrs, defStyleAttr, 0);
 	}
 
-	public CustomControl(Context context, AttributeSet attrs) {
+	public OField(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context, attrs, 0, 0);
 	}
@@ -220,7 +224,10 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 		mColumn = column;
 		mType = getType(column.getType());
 		if (label_view != null) {
-			label_view.setText(mLabel);
+			label_view.setText(getLabelText());
+		}
+		if (mControlData != null) {
+			mControlData.setColumn(mColumn);
 		}
 	}
 
@@ -308,7 +315,7 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 	// EditText control (TextView, EditText)
 	private View initTextControl() {
 		setOrientation(VERTICAL);
-		OEditText edt = new OEditText(mContext);
+		OEditTextField edt = new OEditTextField(mContext);
 		mControlData = edt;
 		edt.setColumn(mColumn);
 		edt.setHint(mLabel);
@@ -332,7 +339,6 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 		selection.setLabelText(getLabelText());
 		selection.setModel(mModel);
 		selection.setArrayResourceId(mValueArrayId);
-		selection.setFieldType(mType);
 		selection.setColumn(mColumn);
 		selection.setWidgetType(mWidgetType);
 		return selection;
@@ -375,9 +381,40 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 		return mModel;
 	}
 
+	public OColumn getColumn() {
+		return mColumn;
+	}
+
+	public void resetData() {
+		mControlData.resetData();
+	}
+
 	@Override
 	public void onValueUpdate(Object value) {
 		mValue = value;
+		if (value instanceof ODataRow) {
+			mValue = ((ODataRow) value).get(OColumn.ROW_ID);
+		}
+		if (mEditable) {
+			if (mControlData.isControlReady()) {
+				ODataRow row = new ODataRow();
+				if (mOnChangeCallback != null
+						|| mOnDomainFilterCallbacks != null) {
+					if (!(value instanceof ODataRow)) {
+						row.put(mColumn.getName(), value);
+					} else {
+						row = (ODataRow) value;
+					}
+				}
+				if (mOnChangeCallback != null) {
+					mOnChangeCallback.onValueChange(row);
+				}
+				if (mOnDomainFilterCallbacks != null) {
+					mColumnDomain.setValue(row.getInt(OColumn.ROW_ID));
+					mOnDomainFilterCallbacks.onFieldValueChanged(mColumnDomain);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -389,4 +426,24 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 		}
 	}
 
+	/**
+	 * OnChange CallBack for column
+	 * 
+	 * @param callback
+	 */
+	public void setOnChangeCallbackListener(OnChangeCallback callback) {
+		mOnChangeCallback = callback;
+	}
+
+	/**
+	 * Domain Filters
+	 * 
+	 * @param domain
+	 * @param callback
+	 */
+	public void setOnFilterDomainCallBack(ColumnDomain domain,
+			OnDomainFilterCallbacks callback) {
+		mColumnDomain = domain;
+		mOnDomainFilterCallbacks = callback;
+	}
 }

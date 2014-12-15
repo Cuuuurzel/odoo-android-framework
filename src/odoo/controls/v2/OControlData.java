@@ -1,4 +1,4 @@
-package com.odoo.demo.controls.com;
+package odoo.controls.v2;
 
 import com.odoo.orm.OColumn;
 
@@ -27,4 +27,8 @@ public interface OControlData {
 
 		public void visibleControl(boolean isVisible);
 	}
+
+	public Boolean isControlReady();
+
+	public void resetData();
 }

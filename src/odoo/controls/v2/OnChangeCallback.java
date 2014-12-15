@@ -1,4 +1,4 @@
-package odoo.controls;
+package odoo.controls.v2;
 
 import com.odoo.orm.ODataRow;
 

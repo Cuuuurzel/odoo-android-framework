@@ -24,6 +24,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import odoo.controls.OField.OFieldType;
+import odoo.controls.v2.OnChangeCallback;
+import odoo.controls.v2.OnDomainFilterCallbacks;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.TypedArray;

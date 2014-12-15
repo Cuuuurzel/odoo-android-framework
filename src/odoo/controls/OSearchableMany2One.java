@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import odoo.ODomain;
+import odoo.controls.v2.OnChangeCallback;
+import odoo.controls.v2.OnDomainFilterCallbacks;
 
 import org.json.JSONArray;
 

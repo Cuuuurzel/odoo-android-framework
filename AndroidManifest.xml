@@ -71,7 +71,7 @@
             android:label="@string/title_activity_user_profile"
             android:theme="@style/ProfileActivityTheme" >
         </activity>
-       <activity android:name="com.odoo.demo.controls.com.SearchableItemActivity" >
+       <activity android:name="odoo.controls.v2.SearchableItemActivity" >
         </activity>
         <!-- Base Providers (Note: update authority as per your app package) -->
         <provider

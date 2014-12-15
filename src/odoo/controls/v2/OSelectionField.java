@@ -1,8 +1,9 @@
-package com.odoo.demo.controls.com;
+package odoo.controls.v2;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import odoo.controls.v2.OField.WidgetType;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.BroadcastReceiver;
@@ -26,8 +27,6 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.odoo.demo.controls.com.CustomControl.FieldType;
-import com.odoo.demo.controls.com.CustomControl.WidgetType;
 import com.odoo.orm.OColumn;
 import com.odoo.orm.OColumn.ColumnDomain;
 import com.odoo.orm.ODataRow;
@@ -42,9 +41,8 @@ public class OSelectionField extends LinearLayout implements OControlData,
 	private Context mContext;
 	private Object mValue = null;
 	private Boolean mEditable = false;
-	private CustomControl.WidgetType mWidget = null;
+	private OField.WidgetType mWidget = null;
 	private Integer mResourceArray = null;
-	private FieldType mType;
 	private OColumn mCol;
 	private String mLabel;
 	private OModel mModel;
@@ -55,6 +53,7 @@ public class OSelectionField extends LinearLayout implements OControlData,
 	private SpinnerAdapter mAdapter;
 	private RadioGroup mRadioGroup = null;
 	private TextView txvView = null;
+	private Boolean mReady = false;
 
 	public OSelectionField(Context context, AttributeSet attrs,
 			int defStyleAttr, int defStyleRes) {
@@ -87,6 +86,26 @@ public class OSelectionField extends LinearLayout implements OControlData,
 			initControl();
 	}
 
+	private void createRadioGroup() {
+		final LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT);
+		if (mRadioGroup == null) {
+			mRadioGroup = new RadioGroup(mContext);
+			mRadioGroup.setLayoutParams(params);
+		} else {
+			removeView(mRadioGroup);
+		}
+		mRadioGroup.removeAllViews();
+		mRadioGroup.setOnCheckedChangeListener(this);
+		for (ODataRow label : items) {
+			RadioButton rdoBtn = new RadioButton(mContext);
+			rdoBtn.setLayoutParams(params);
+			rdoBtn.setText(label.getString("name"));
+			mRadioGroup.addView(rdoBtn);
+		}
+		addView(mRadioGroup);
+	}
+
 	@Override
 	public void initControl() {
 		final LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
@@ -98,17 +117,7 @@ public class OSelectionField extends LinearLayout implements OControlData,
 			if (mWidget != null) {
 				switch (mWidget) {
 				case RadioGroup:
-					mRadioGroup = new RadioGroup(mContext);
-					mRadioGroup.setLayoutParams(params);
-					mRadioGroup.removeAllViews();
-					mRadioGroup.setOnCheckedChangeListener(this);
-					for (ODataRow label : items) {
-						RadioButton rdoBtn = new RadioButton(mContext);
-						rdoBtn.setLayoutParams(params);
-						rdoBtn.setText(label.getString("name"));
-						mRadioGroup.addView(rdoBtn);
-					}
-					addView(mRadioGroup);
+					createRadioGroup();
 					return;
 				case SelectionDialog:
 					txvView = new TextView(mContext);
@@ -142,8 +151,13 @@ public class OSelectionField extends LinearLayout implements OControlData,
 							intent.putExtra("selected_position", getPos());
 							intent.putExtra(OColumn.ROW_ID, getPos());
 							intent.putExtra("search_hint", getLabel());
-							if (mCol != null)
+							if (mCol != null) {
 								intent.putExtra("column_name", mCol.getName());
+							}
+							/*
+							 * FIXME: What about filter domain. Pass detail for
+							 * filter domain
+							 */
 							intent.putExtra("model", mModel.getModelName());
 							intent.putExtra("live_search",
 									(mWidget == WidgetType.SearchableLive));
@@ -185,8 +199,12 @@ public class OSelectionField extends LinearLayout implements OControlData,
 			if (mResourceArray != null && mResourceArray != -1) {
 				String[] items_list = mContext.getResources().getStringArray(
 						mResourceArray);
+				ODataRow row = new ODataRow();
+				row.put(OColumn.ROW_ID, -1);
+				row.put("name", "Nothing Selected");
+				items.add(row);
 				for (int i = 0; i < items_list.length; i++) {
-					ODataRow row = new ODataRow();
+					row = new ODataRow();
 					row.put(OColumn.ROW_ID, i);
 					row.put("name", items_list[i]);
 					items.add(row);
@@ -214,6 +232,7 @@ public class OSelectionField extends LinearLayout implements OControlData,
 		mValue = value;
 		if (mValue == null)
 			return;
+		ODataRow row = new ODataRow();
 		if (isEditable()) {
 			if (mWidget != null) {
 				switch (mWidget) {
@@ -221,19 +240,22 @@ public class OSelectionField extends LinearLayout implements OControlData,
 					if (mResourceArray != -1) {
 						((RadioButton) mRadioGroup.getChildAt(getPos()))
 								.setChecked(true);
+						row = items.get(getPos());
 					} else {
 						Integer row_id = null;
-						if (value instanceof OM2ORecord)
-							row_id = ((OM2ORecord) value).getId();
-						else
+						if (value instanceof OM2ORecord) {
+							row = ((OM2ORecord) value).browse();
+							row_id = row.getInt(OColumn.ROW_ID);
+						} else
 							row_id = (Integer) value;
-						int index = -1;
+						int index = 0;
 						for (int i = 0; i < items.size(); i++) {
 							if (items.get(i).getInt(OColumn.ROW_ID) == row_id) {
 								index = i;
 								break;
 							}
 						}
+						row = items.get(index);
 						((RadioButton) mRadioGroup.getChildAt(index))
 								.setChecked(true);
 					}
@@ -241,7 +263,6 @@ public class OSelectionField extends LinearLayout implements OControlData,
 				case Searchable:
 				case SearchableLive:
 				case SelectionDialog:
-					ODataRow row = null;
 					if (mResourceArray != -1) {
 						row = items.get(getPos());
 					} else {
@@ -256,33 +277,40 @@ public class OSelectionField extends LinearLayout implements OControlData,
 						dialog.dismiss();
 					}
 					break;
+				default:
+					break;
 				}
 			} else {
 				if (mResourceArray != -1) {
 					mSpinner.setSelection(getPos());
+					row = items.get(getPos());
 				} else {
 					Integer row_id = null;
-					if (value instanceof OM2ORecord)
-						row_id = ((OM2ORecord) value).getId();
-					else
+					if (value instanceof OM2ORecord) {
+						row = ((OM2ORecord) value).browse();
+						row_id = row.getInt(OColumn.ROW_ID);
+					} else
 						row_id = (Integer) value;
-					int index = -1;
+					int index = 0;
 					for (int i = 0; i < items.size(); i++) {
 						if (items.get(i).getInt(OColumn.ROW_ID) == row_id) {
 							index = i;
 							break;
 						}
 					}
+					row = items.get(index);
 					mSpinner.setSelection(index);
 				}
 			}
 		} else {
-			ODataRow row = null;
 			if (mResourceArray != -1) {
 				row = items.get(getPos());
 			} else {
 				if (value instanceof OM2ORecord) {
 					row = ((OM2ORecord) value).browse();
+					if (row == null) {
+						row = new ODataRow();
+					}
 				} else {
 					int row_id = (Integer) value;
 					row = getRecordData(row_id);
@@ -291,7 +319,7 @@ public class OSelectionField extends LinearLayout implements OControlData,
 			txvView.setText(row.getString("name"));
 		}
 		if (mValueUpdateListener != null) {
-			mValueUpdateListener.onValueUpdate(value);
+			mValueUpdateListener.onValueUpdate(row);
 		}
 	}
 
@@ -324,17 +352,13 @@ public class OSelectionField extends LinearLayout implements OControlData,
 		return mEditable;
 	}
 
-	public void setWidgetType(CustomControl.WidgetType type) {
+	public void setWidgetType(OField.WidgetType type) {
 		mWidget = type;
 		initControl();
 	}
 
 	public void setArrayResourceId(int res_id) {
 		mResourceArray = res_id;
-	}
-
-	public void setFieldType(FieldType type) {
-		mType = type;
 	}
 
 	public void setColumn(OColumn col) {
@@ -346,8 +370,12 @@ public class OSelectionField extends LinearLayout implements OControlData,
 
 	private ODataRow getRecordData(int row_id) {
 		ODataRow row = new ODataRow();
-		OModel rel_model = mModel.createInstance(mCol.getType());
-		row = rel_model.select(row_id);
+		if (row_id > 0) {
+			OModel rel_model = mModel.createInstance(mCol.getType());
+			row = rel_model.select(row_id);
+		} else {
+			row = items.get(0);
+		}
 		return row;
 	}
 
@@ -384,6 +412,7 @@ public class OSelectionField extends LinearLayout implements OControlData,
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
 		mValue = items.get(position).get(OColumn.ROW_ID);
+		setValue(mValue);
 	}
 
 	@Override
@@ -441,17 +470,20 @@ public class OSelectionField extends LinearLayout implements OControlData,
 		OModel rel_model = model.createInstance(column.getType());
 		StringBuffer whr = new StringBuffer();
 		List<Object> args_list = new ArrayList<Object>();
-		for (String key : column.getDomains().keySet()) {
-			ColumnDomain domain = column.getDomains().get(key);
-			if (domain.getConditionalOperator() != null) {
-				whr.append(domain.getConditionalOperator());
-			} else {
-				whr.append(" ");
-				whr.append(domain.getColumn());
-				whr.append(" ");
-				whr.append(domain.getOperator());
-				whr.append(" ? ");
-				args_list.add(domain.getValue().toString());
+		// Skipping onchange domain filter
+		if (!column.hasDomainFilterColumn()) {
+			for (String key : column.getDomains().keySet()) {
+				ColumnDomain domain = column.getDomains().get(key);
+				if (domain.getConditionalOperator() != null) {
+					whr.append(domain.getConditionalOperator());
+				} else {
+					whr.append(" ");
+					whr.append(domain.getColumn());
+					whr.append(" ");
+					whr.append(domain.getOperator());
+					whr.append(" ? ");
+					args_list.add(domain.getValue().toString());
+				}
 			}
 		}
 		String where = null;
@@ -462,6 +494,10 @@ public class OSelectionField extends LinearLayout implements OControlData,
 		}
 		Cursor cr = rel_model.resolver().query(new String[] { "name" }, where,
 				args, "name");
+		ODataRow row = new ODataRow();
+		row.put(OColumn.ROW_ID, -1);
+		row.put("name", "Nothing Selected");
+		items.add(row);
 		if (cr.moveToFirst()) {
 			do {
 				items.add(CursorUtil.toDatarow(cr));
@@ -480,5 +516,43 @@ public class OSelectionField extends LinearLayout implements OControlData,
 		int index = mRadioGroup.indexOfChild(group.findViewById(checkedId));
 		ODataRow row = items.get(index);
 		setValue(row.getInt(OColumn.ROW_ID));
+	}
+
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		mReady = true;
+	}
+
+	@Override
+	public Boolean isControlReady() {
+		return mReady;
+	}
+
+	@Override
+	public void resetData() {
+		if (isEditable()) {
+			if (mWidget == null) {
+				if (mAdapter != null) {
+					createItems();
+					mAdapter.notifyDataSetChanged();
+				}
+			} else {
+				switch (mWidget) {
+				case SelectionDialog:
+					createItems();
+					break;
+				case RadioGroup:
+					createItems();
+					createRadioGroup();
+					break;
+				case Searchable:
+				case SearchableLive:
+					break;
+				default:
+					break;
+				}
+			}
+		}
 	}
 }

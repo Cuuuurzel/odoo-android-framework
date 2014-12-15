@@ -3,6 +3,8 @@ package com.odoo.addons.partner.demo.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import odoo.controls.v2.OForm;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +15,6 @@ import android.view.ViewGroup;
 
 import com.odoo.R;
 import com.odoo.base.res.ResPartner;
-import com.odoo.demo.controls.com.CustomForm;
 import com.odoo.orm.ODataRow;
 import com.odoo.support.fragment.BaseFragment;
 import com.odoo.util.drawer.DrawerItem;
@@ -23,7 +24,7 @@ public class PartnerDemo extends BaseFragment implements OnClickListener {
 
 	View mView = null;
 	ODataRow row = null;
-	CustomForm cForm = null;
+	OForm cForm = null;
 
 	public enum Keys {
 		Demo
@@ -45,7 +46,7 @@ public class PartnerDemo extends BaseFragment implements OnClickListener {
 	}
 
 	private void init() {
-		cForm = (CustomForm) mView.findViewById(R.id.form);
+		cForm = (OForm) mView.findViewById(R.id.form);
 		row = new ODataRow();
 		ResPartner resPartner = new ResPartner(getActivity());
 		row = resPartner.select(6);

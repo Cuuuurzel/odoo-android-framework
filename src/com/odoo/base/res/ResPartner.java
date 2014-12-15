@@ -87,6 +87,7 @@ public class ResPartner extends OModel {
 	}
 
 	public ODataRow onChange_Company_id(ODataRow row) {
+		row = select(row.getInt(OColumn.ROW_ID));
 		ODataRow res = new ODataRow();
 		res.put("city", row.getString("city"));
 		res.put("website", row.getString("website"));
