@@ -43,6 +43,7 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 	private ViewGroup container = null;
 	private Boolean with_bottom_padding = true, with_top_padding = true;
 	private WidgetType mWidgetType = null;
+	private String mParsePattern = null;
 
 	// Controls
 	private OControlData mControlData = null;
@@ -68,7 +69,7 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 	}
 
 	public enum FieldType {
-		Text, Boolean, ManyToOne, Chips, Selection;
+		Text, Boolean, ManyToOne, Chips, Selection, Date, DateTime;
 
 		public static FieldType getTypeValue(int type_val) {
 			switch (type_val) {
@@ -82,6 +83,10 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 				return FieldType.Chips;
 			case 4:
 				return FieldType.Selection;
+			case 5:
+				return FieldType.Date;
+			case 6:
+				return FieldType.DateTime;
 			}
 			return FieldType.Text;
 		}
@@ -134,6 +139,8 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 					R.styleable.customcontrol_with_top_padding, true);
 			mLabel = types.getString(R.styleable.customcontrol_control_label);
 			mValue = types.getString(R.styleable.customcontrol_default_value);
+			mParsePattern = types
+					.getString(R.styleable.customcontrol_parse_pattern);
 			mValueArrayId = types.getResourceId(
 					R.styleable.customcontrol_value_array, -1);
 			mWidgetType = WidgetType.getWidgetType(types.getInt(
@@ -184,6 +191,10 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 		case ManyToOne:
 		case Selection:
 			controlView = initSelectionWidget();
+			break;
+		case Date:
+		case DateTime:
+			controlView = initDateTimeControl(mType);
 			break;
 		default:
 			break;
@@ -314,6 +325,7 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 		return bool;
 	}
 
+	// Selection, Searchable, SearchableLive
 	private View initSelectionWidget() {
 		OSelectionField selection = new OSelectionField(mContext);
 		mControlData = selection;
@@ -324,6 +336,16 @@ public class CustomControl extends LinearLayout implements ValueUpdateListener {
 		selection.setColumn(mColumn);
 		selection.setWidgetType(mWidgetType);
 		return selection;
+	}
+
+	private View initDateTimeControl(FieldType type) {
+		ODateTimeField datetime = new ODateTimeField(mContext);
+		mControlData = datetime;
+		datetime.setFieldType(type);
+		datetime.setParsePattern(mParsePattern);
+		datetime.setLabelText(getLabelText());
+		datetime.setColumn(mColumn);
+		return datetime;
 	}
 
 	private TextView getLabelView() {

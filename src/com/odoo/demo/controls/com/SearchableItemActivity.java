@@ -3,8 +3,10 @@ package com.odoo.demo.controls.com;
 import java.util.ArrayList;
 import java.util.List;
 
+import odoo.ODomain;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -20,13 +22,17 @@ import android.widget.ListView;
 
 import com.odoo.R;
 import com.odoo.orm.OColumn;
+import com.odoo.orm.OColumn.ColumnDomain;
 import com.odoo.orm.ODataRow;
+import com.odoo.orm.OFieldsHelper;
 import com.odoo.orm.OModel;
+import com.odoo.orm.ServerDataHelper;
 import com.odoo.support.listview.OListAdapter;
+import com.odoo.support.listview.OListAdapter.OnSearchChange;
 import com.odoo.util.OControls;
 
 public class SearchableItemActivity extends ActionBarActivity implements
-		OnItemClickListener, TextWatcher, OnClickListener {
+		OnItemClickListener, TextWatcher, OnClickListener, OnSearchChange {
 
 	private EditText edt_searchable_input;
 	private ListView mList = null;
@@ -37,6 +43,8 @@ public class SearchableItemActivity extends ActionBarActivity implements
 	private int resource_array_id = -1;
 	private OModel mModel = null;
 	private Integer mRowId = null;
+	private LiveSearch mLiveDataLoader = null;
+	private OColumn mCol = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,13 +84,12 @@ public class SearchableItemActivity extends ActionBarActivity implements
 					objects.add(row);
 				}
 			} else {
-				OColumn col = null;
 				OModel rel_model = null;
 				if (extra.containsKey("column_name")) {
-					col = mModel.getColumn(extra.getString("column_name"));
-					rel_model = mModel.createInstance(col.getType());
+					mCol = mModel.getColumn(extra.getString("column_name"));
+					rel_model = mModel.createInstance(mCol.getType());
 					objects.addAll(OSelectionField.getRecordItems(rel_model,
-							col));
+							mCol));
 				}
 			}
 
@@ -100,7 +107,8 @@ public class SearchableItemActivity extends ActionBarActivity implements
 					ODataRow row = (ODataRow) objects.get(position);
 					OControls.setText(v, android.R.id.text1,
 							row.getString("name"));
-					if (selected_position == row.getInt(OColumn.ROW_ID)) {
+					if (row.contains(OColumn.ROW_ID)
+							&& selected_position == row.getInt(OColumn.ROW_ID)) {
 						v.setBackgroundColor(getResources().getColor(
 								R.color.control_selection_selected));
 					} else {
@@ -109,6 +117,9 @@ public class SearchableItemActivity extends ActionBarActivity implements
 					return v;
 				}
 			};
+			if (mLiveSearch) {
+				mAdapter.setOnSearchChange(this);
+			}
 			mList.setAdapter(mAdapter);
 		} else {
 			finish();
@@ -120,6 +131,10 @@ public class SearchableItemActivity extends ActionBarActivity implements
 			long id) {
 		Intent intent = new Intent("searchable_value_select");
 		ODataRow data = (ODataRow) objects.get(position);
+		if (!data.contains(OColumn.ROW_ID)) {
+			mModel.getSyncHelper().quickStoreRecords(data);
+			data.put(OColumn.ROW_ID, mModel.selectRowId(data.getInt("id")));
+		}
 		intent.putExtra("selected_position", data.getInt(OColumn.ROW_ID));
 		if (mRowId != null) {
 			intent.putExtra("record_id", true);
@@ -158,6 +173,69 @@ public class SearchableItemActivity extends ActionBarActivity implements
 	public void onClick(View v) {
 		setResult(RESULT_CANCELED);
 		finish();
+	}
+
+	@Override
+	public void onSearchChange(List<Object> newRecords) {
+		if (newRecords.size() <= 0) {
+			if (mLiveDataLoader != null)
+				mLiveDataLoader.cancel(true);
+			if (edt_searchable_input.getText().length() >= 3) {
+				mLiveDataLoader = new LiveSearch();
+				mLiveDataLoader.execute(edt_searchable_input.getText()
+						.toString());
+			}
+		}
+	}
+
+	private class LiveSearch extends AsyncTask<String, Void, List<ODataRow>> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			findViewById(R.id.loading_progress).setVisibility(View.VISIBLE);
+			mList.setVisibility(View.GONE);
+		}
+
+		@Override
+		protected List<ODataRow> doInBackground(String... params) {
+			try {
+				Thread.sleep(300);
+				ServerDataHelper helper = mModel.getSyncHelper().dataHelper();
+				ODomain domain = new ODomain();
+				domain.add("name", "ilike", params[0]);
+				if (mCol != null) {
+					for (String key : mCol.getDomains().keySet()) {
+						ColumnDomain dom = mCol.getDomains().get(key);
+						domain.add(dom.getColumn(), dom.getOperator(),
+								dom.getValue());
+					}
+				}
+				OFieldsHelper fields = new OFieldsHelper(mModel.getColumns());
+				return helper.searchRecords(fields, domain, 10);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(List<ODataRow> result) {
+			super.onPostExecute(result);
+			findViewById(R.id.loading_progress).setVisibility(View.GONE);
+			mList.setVisibility(View.VISIBLE);
+			if (result != null && result.size() > 0) {
+				objects.addAll(result);
+				mAdapter.notifiyDataChange(objects);
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			findViewById(R.id.loading_progress).setVisibility(View.GONE);
+			mList.setVisibility(View.VISIBLE);
+		}
 	}
 
 }

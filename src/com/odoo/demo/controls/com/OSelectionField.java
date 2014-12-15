@@ -35,7 +35,6 @@ import com.odoo.orm.OM2ORecord;
 import com.odoo.orm.OModel;
 import com.odoo.util.CursorUtil;
 import com.odoo.util.OControls;
-import com.odoo.util.logger.OLog;
 
 public class OSelectionField extends LinearLayout implements OControlData,
 		OnItemSelectedListener, OnItemClickListener, OnCheckedChangeListener {
@@ -130,6 +129,7 @@ public class OSelectionField extends LinearLayout implements OControlData,
 					addView(txvView);
 					return;
 				case Searchable:
+				case SearchableLive:
 					txvView = new TextView(mContext);
 					txvView.setLayoutParams(params);
 					setOnClickListener(new OnClickListener() {
@@ -159,9 +159,6 @@ public class OSelectionField extends LinearLayout implements OControlData,
 					});
 					addView(txvView);
 					return;
-				case SearchableLive:
-					OLog.log("SearchableLive Widget.");
-					break;
 				default:
 					break;
 				}
@@ -242,6 +239,7 @@ public class OSelectionField extends LinearLayout implements OControlData,
 					}
 					break;
 				case Searchable:
+				case SearchableLive:
 				case SelectionDialog:
 					ODataRow row = null;
 					if (mResourceArray != -1) {

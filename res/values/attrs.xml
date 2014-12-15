@@ -95,10 +95,15 @@
         <attr name="show_icon" format="boolean" />
         <attr name="show_label" format="boolean" />
         <attr name="icon_tint" format="reference|color" />
+        <attr name="parse_pattern" format="string" />
         <attr name="fieldType">
             <enum name="Text" value="0" />
             <enum name="Boolean" value="1" />
+            <enum name="ManyToOne" value="2" />
+            <enum name="Chips" value="3" />
             <enum name="Selection" value="4" />
+            <enum name="Date" value="5" />
+            <enum name="DateTime" value="6" />
         </attr>
         <attr name="customWidget">
             <enum name="Switch" value="0" />

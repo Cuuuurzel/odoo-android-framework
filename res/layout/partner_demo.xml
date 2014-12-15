@@ -82,11 +82,35 @@
         <com.odoo.demo.controls.com.CustomControl
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            odoo:customWidget="Searchable"
+            odoo:customWidget="SearchableLive"
             odoo:icon_resource="@drawable/ic_action_user"
             odoo:icon_tint="@color/theme_secondary_dark"
             odoo:ofield_name="parent_id" >
         </com.odoo.demo.controls.com.CustomControl>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="72dp"
+            android:background="#cccccc" />
+
+        <com.odoo.demo.controls.com.CustomControl
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            odoo:control_label="Date Control"
+            odoo:default_value="now()"
+            odoo:fieldType="Date"
+            odoo:ofield_name="date_control_test"
+            odoo:parse_pattern="MMMM dd, yyyy" />
+
+        <com.odoo.demo.controls.com.CustomControl
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            odoo:control_label="Date Time Control"
+            odoo:default_value="now()"
+            odoo:fieldType="DateTime"
+            odoo:parse_pattern="MMMM dd, yyyy hh:mm a"
+            odoo:ofield_name="datetime_control_test" />
 
         <View
             android:layout_width="match_parent"

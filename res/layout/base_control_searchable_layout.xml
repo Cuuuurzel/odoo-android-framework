@@ -44,6 +44,11 @@
 
     <View style="@style/ViewSeperator" />
 
+    <include
+        android:id="@+id/loading_progress"
+        layout="@layout/listview_data_loading_progress"
+        android:visibility="gone" />
+
     <ListView
         android:id="@+id/searchable_items"
         android:layout_width="match_parent"
