@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/odoo-android-framework/odoo-rpc-v2/unspecified/libs/core.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="f3c7e89b5124329cddba83bcf7c26c1c636c16b8">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/core-900afdfe748fa27e741d86381b4fac08dcd1380e.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="7ff613bf78ab057293892fdbd4169eda899c89b9">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-bad85126b4fa328723932f5cd7b0bd6f37560ee2.jar" />
+    </item>
+    <item
+        jar="/home/curzel/android-studio/sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-6f60e95fa3831d4d4b45d1ecd4b28660ea61f6cc.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/odoo-android-framework/parallax-effect-lib/unspecified/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d5d51df78c3099a605c78513a2868cf87fae2849">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-6cbdf9eb7688dc5d4af572c740d18609f8c624bd.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/odoo-android-framework/odoo-rpc-v2/unspecified/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="bc4b9d67a5f2ed0b2392f0b3bf268e31b41782a5">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-c9f32c5dc3351584450343ca93405ff9bea798bf.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="17f8750d5c0749e44dd7c54aa390d9c937803825">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-dd254f2761b3ad2919b55ea22f8938c6b7f7fe50.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a08d65794b844d8e7540bf9a33859bf3b2482d7f">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-50914818250d98127855f7f95bc8df197e6616ed.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="3033cc3a2c68dff3e5b646d6d084bdbdf7d00b25">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-de7270456cc3b859a261f56dbff119248cabc82a.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9224bc4c54ba95147c7eabd874573763c07cb6be">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-198775bbeaac237af267bbed295c195b0748d343.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="11842de6a309c447b3a3d60d73ad637a87c58994">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-7fa419729c3da9e89e02626586e8c05e85c98345.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-cf905727cf5f74ec92c9486ad0a73c9f88a4ac52.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/libs/internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-5e6e63ad01150313403de6b52384c09e4ebcb853.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4c93d99d454c975536bbe3b42283eee847f03ea3">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-1c4afa85e47d5164f9f5336c9f1b57f300f9c0ab.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a96b762bde4139de855735f175ec4d17dca55a6d">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-8b217ed91177a3bd89dda3646af292038db495af.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="29fd6d3794b71491c2789708cd8d03c71feb8954">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-74420780d6da4e7a150e8c14872149c44eb5e60a.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/libs/swipe_library.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="56650729f9650e4d5d59267ddb840dfc3aaf4ff9">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/swipe_library-38e7971b69f0c0e1b0e8ea070fbad488c192b0a8.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="3c0b099f9de16b265ecd6122fcb603e7d0d29f90">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-ce4f48c6939f238626996f8802427cab6d2033d9.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-acf0f346f248d49ad788a0b8c694ffb97ff853f0.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="73ccb92b70112f2e463e415ef8d7275de7da6516">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-377f171ca761471f2a3f9b681226dc746ae8eeda.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="fb04b12526b0073c7fb1ebb70c5842d82ee95596">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-de9fb83074f3e0b88ef54f236c3c30b50e2f78b6.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/odoo-android-framework/intro-slider-lib/unspecified/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1bcfa20c46bb08474f62d16d6183c8aac0ee61ea">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-a85f0a88c2cb451f654987f25dc4b4a24edce910.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ef5f051e7308febe289dc93c67c5f32785b4260a">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-577fbb27976efa6f9fbbeb1f62bf25e0f8446801.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="055783146ba9654a725442563be78cad303aad1f">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-9e6b0f76b53bc7afe2a2ee090303df3ca7e4c02f.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="0e8228b4bc69c6a2c8d7c18498a77e53417d2574">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-1061aecf65d57c4ca7d5dae85a545fec19e40a1f.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c976518693e89ad44fbfccfc654941eaec198d08">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-925d8b3087e1ad12ad5fef1baa5450fb7035d9d3.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1c5a76debf0c2857ccad422c4a80ed785982f8df">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-799c6e878b8216a4e6f4787faa42a7107c719cc7.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4cd0b093824b3228fffc21ea369b98d0b1db6566">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-73cf03d913d28867e721ce3b72ddaaedce88ff20.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="41b3870cbe5fa546d8095b5b89d42cb69f3dd175">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-e2e13bc748adc2dbbffbb8a783c47dc0760df18e.jar" />
+    </item>
+    <item
+        jar="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e3d791b42eaa90416cd0b2d2e608092794a3baa4">
+        <dex dex="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/app/build/intermediates/pre-dexed/debug/classes-fc5f01f09d6410b3ff6eea6eaab5e741507cc857.jar" />
+    </item>
+
+</items>
