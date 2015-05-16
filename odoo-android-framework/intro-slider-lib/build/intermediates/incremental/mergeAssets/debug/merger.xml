@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/intro-slider-lib/src/main/assets"/></dataSet><dataSet config="debug"><source path="/home/curzel/Desktop/hfarm/2015-hack-retail/geox/odoo-android-framework/intro-slider-lib/src/debug/assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/home/curzel/Desktop/dev/odoo-android-framework/odoo-android-framework/intro-slider-lib/src/main/assets"/></dataSet><dataSet config="debug"><source path="/home/curzel/Desktop/dev/odoo-android-framework/odoo-android-framework/intro-slider-lib/src/debug/assets"/></dataSet></merger>
